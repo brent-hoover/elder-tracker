@@ -7,8 +7,8 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-healthcheckPath = "/api/health"
-healthcheckTimeout = 300
+# healthcheckPath = "/api/health"
+# healthcheckTimeout = 300
 restartPolicyType = "always"
 
 [environments.production]

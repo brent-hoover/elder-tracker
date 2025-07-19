@@ -14,6 +14,7 @@ export class AppController {
 
   @Get('health')
   getHealth(): { status: string; timestamp: string; env: string } {
+    console.log('=== Health check endpoint hit ===');
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),

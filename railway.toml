@@ -12,4 +12,3 @@ restartPolicyType = "always"
 
 [environments.production]
 NODE_ENV = "production"
-PORT = 3000

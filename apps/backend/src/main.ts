@@ -10,6 +10,18 @@ console.log('=== Application Startup ===');
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
 console.log('PORT:', process.env.PORT);
+console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
+
+// Ensure required environment variables
+if (!process.env.DATABASE_URL && process.env.NODE_ENV === 'production') {
+  console.error('ERROR: DATABASE_URL is required in production');
+  process.exit(1);
+}
+
+if (!process.env.JWT_SECRET) {
+  console.warn('WARNING: JWT_SECRET not set, using default (INSECURE FOR PRODUCTION)');
+  process.env.JWT_SECRET = 'default-jwt-secret-change-in-production';
+}
 
 async function bootstrap() {
   console.log('=== Starting NestJS Application ===');
@@ -58,7 +70,19 @@ async function bootstrap() {
   }
 
   const port = process.env.PORT ?? 3000;
+  
+  // Add a simple health check endpoint before app starts
+  const httpAdapter = app.getHttpAdapter();
+  const instance = httpAdapter.getInstance();
+  instance.get('/api/health-check', (req, res) => {
+    res.json({ status: 'starting', port, timestamp: new Date().toISOString() });
+  });
+  
   await app.listen(port);
   console.log(`=== Application is running on port ${port} ===`);
 }
-void bootstrap();
+bootstrap().catch((error) => {
+  console.error('=== Failed to start application ===');
+  console.error(error);
+  process.exit(1);
+});

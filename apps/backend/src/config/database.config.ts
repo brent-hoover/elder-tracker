@@ -4,15 +4,10 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 export default registerAs(
   'database',
   (): TypeOrmModuleOptions => {
-    // Log all env vars starting with 'DATABASE' or 'RAILWAY' for debugging
-    console.log('=== Database Configuration Debug ===');
+    // Log database configuration for debugging
+    console.log('=== Database Configuration ===');
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
-    console.log('DATABASE_URL length:', process.env.DATABASE_URL?.length || 0);
-    console.log('RAILWAY env vars:', Object.keys(process.env).filter(key => key.includes('RAILWAY')));
-    console.log('Database-related env vars:', Object.keys(process.env).filter(key => 
-      key.includes('DATABASE') || key.includes('POSTGRES') || key.includes('DB')
-    ));
     
     // Railway provides DATABASE_URL
     if (process.env.DATABASE_URL || process.env.RAILWAY_DATABASE_URL) {
@@ -29,8 +24,13 @@ export default registerAs(
         ssl: { rejectUnauthorized: false },
         extra: {
           // Additional connection options for Railway
-          ssl: { rejectUnauthorized: false }
-        }
+          ssl: { rejectUnauthorized: false },
+          // Connection pool settings
+          max: 5,
+          connectionTimeoutMillis: 60000, // 60 seconds
+        },
+        retryAttempts: 5,
+        retryDelay: 5000, // 5 seconds between retries
       };
     }
 

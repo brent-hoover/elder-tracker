@@ -9,7 +9,7 @@ cmds = [
     "echo 'Build env check - DATABASE_URL:' $DATABASE_URL",
     "echo 'Memory info:' && free -m",
     "NODE_OPTIONS='--max-old-space-size=2048' npm run build:backend",
-    "npm run build:frontend",
+    "NODE_OPTIONS='--max-old-space-size=2048' npm run build:frontend",
     "mkdir -p apps/backend/dist/src",
     "cp -r apps/frontend/dist apps/backend/dist/src/frontend"
 ]

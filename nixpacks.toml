@@ -20,4 +20,4 @@ cmds = [
 ]
 
 [start]
-cmd = "pwd && ls -la && ls -la apps/backend/dist/src/ && cat apps/backend/dist/src/main.js | head -20"
+cmd = "npm start"

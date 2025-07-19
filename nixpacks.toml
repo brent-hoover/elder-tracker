@@ -10,8 +10,12 @@ cmds = [
     "npm run build:backend",
     "npm run build:frontend",
     "mkdir -p apps/backend/dist/src",
-    "cp -r apps/frontend/dist apps/backend/dist/src/frontend"
+    "cp -r apps/frontend/dist apps/backend/dist/src/frontend",
+    "echo '=== Checking build output ==='",
+    "ls -la apps/backend/dist/src/",
+    "echo '=== main.js file info ==='",
+    "ls -la apps/backend/dist/src/main.js || echo 'main.js not found'"
 ]
 
 [start]
-cmd = "./scripts/start-prod.sh"
+cmd = "node --version && echo 'Starting app...' && cd apps/backend && node dist/src/main"

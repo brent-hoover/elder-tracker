@@ -12,3 +12,4 @@ restartPolicyType = "always"
 
 [environments.production]
 NODE_ENV = "production"
+JWT_SECRET = "change-this-secret-in-production"

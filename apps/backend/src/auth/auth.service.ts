@@ -72,4 +72,8 @@ export class AuthService {
     const user = await this.usersService.create(createUserDto);
     return this.login(user);
   }
+
+  async getUserById(userId: string): Promise<User> {
+    return this.usersService.findOne(userId);
+  }
 }

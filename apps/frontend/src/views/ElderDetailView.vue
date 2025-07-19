@@ -143,6 +143,18 @@
                     {{ formatDateTime(update.eventDate) }}
                   </p>
                 </div>
+                <div class="ml-4 flex-shrink-0">
+                  <button
+                    v-if="canDeleteUpdate(update)"
+                    @click="deleteUpdate(update)"
+                    class="text-red-600 hover:text-red-900"
+                    title="Delete update"
+                  >
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </li>
           </ul>
@@ -160,6 +172,14 @@
       @close="showCreateUpdateModal = false"
       @created="handleUpdateCreated"
     />
+
+    <!-- Edit Elder Modal -->
+    <EditElderModal
+      v-if="showEditModal && elder"
+      :elder="elder"
+      @close="showEditModal = false"
+      @updated="handleElderUpdated"
+    />
   </AppLayout>
 </template>
 
@@ -168,10 +188,11 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppLayout from '@/components/AppLayout.vue'
 import CreateStatusUpdateModal from '@/components/CreateStatusUpdateModal.vue'
+import EditElderModal from '@/components/EditElderModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEldersStore } from '@/stores/elders'
 import { useStatusUpdatesStore } from '@/stores/status-updates'
-import type { UpdateType } from '@/types'
+import { UpdateType } from '@/types'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -194,6 +215,12 @@ function handleUpdateCreated() {
   showCreateUpdateModal.value = false
   const elderId = route.params.id as string
   updatesStore.fetchUpdatesByElder(elderId)
+}
+
+function handleElderUpdated() {
+  showEditModal.value = false
+  const elderId = route.params.id as string
+  eldersStore.fetchElder(elderId)
 }
 
 function formatDate(date: string): string {
@@ -227,5 +254,26 @@ function getUpdateTypeClass(type: UpdateType): string {
     [UpdateType.GENERAL_OBSERVATION]: 'bg-gray-100 text-gray-800'
   }
   return classes[type] || 'bg-gray-100 text-gray-800'
+}
+
+function canDeleteUpdate(update: any): boolean {
+  // Only admins can delete status updates
+  return authStore.isAdmin
+}
+
+async function deleteUpdate(update: any) {
+  if (!confirm('Are you sure you want to delete this status update?')) {
+    return
+  }
+
+  try {
+    await updatesStore.deleteUpdate(update.id)
+    // Refresh the updates list
+    const elderId = route.params.id as string
+    await updatesStore.fetchUpdatesByElder(elderId)
+  } catch (error) {
+    console.error('Failed to delete update:', error)
+    alert('Failed to delete status update')
+  }
 }
 </script>

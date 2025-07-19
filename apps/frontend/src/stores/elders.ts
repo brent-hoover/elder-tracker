@@ -89,6 +89,27 @@ export const useEldersStore = defineStore('elders', () => {
     }
   }
 
+  async function assignCaregivers(elderId: string, caregiverIds: string[]) {
+    loading.value = true
+    error.value = null
+    try {
+      const updatedElder = await eldersApi.assignCaregivers(elderId, caregiverIds)
+      const index = elders.value.findIndex(e => e.id === elderId)
+      if (index !== -1) {
+        elders.value[index] = updatedElder
+      }
+      if (currentElder.value?.id === elderId) {
+        currentElder.value = updatedElder
+      }
+      return updatedElder
+    } catch (err) {
+      error.value = 'Failed to assign caregivers'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     elders,
     currentElder,
@@ -98,6 +119,7 @@ export const useEldersStore = defineStore('elders', () => {
     fetchElder,
     createElder,
     updateElder,
-    deleteElder
+    deleteElder,
+    assignCaregivers
   }
 })

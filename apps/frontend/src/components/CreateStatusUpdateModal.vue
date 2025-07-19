@@ -122,6 +122,7 @@ async function handleSubmit() {
   try {
     const update = await updatesStore.createUpdate(formData.value)
     emit('created', update)
+    emit('close')
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Failed to create status update'
   } finally {

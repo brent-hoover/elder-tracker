@@ -116,6 +116,26 @@
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 ></textarea>
               </div>
+
+              <div>
+                <label for="caregivers" class="block text-sm font-medium text-gray-700">
+                  Assign Caregivers
+                </label>
+                <select
+                  v-model="selectedCaregivers"
+                  multiple
+                  id="caregivers"
+                  size="5"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                >
+                  <option v-for="user in availableUsers" :key="user.id" :value="user.id">
+                    {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+                  </option>
+                </select>
+                <p class="mt-1 text-sm text-gray-500">
+                  Hold Ctrl/Cmd to select multiple caregivers
+                </p>
+              </div>
             </div>
 
             <div v-if="error" class="mt-4 text-sm text-red-600">
@@ -146,9 +166,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useEldersStore } from '@/stores/elders'
-import type { CreateElderDto } from '@/types'
+import { useUsersStore } from '@/stores/users'
+import type { CreateElderDto, User } from '@/types'
 
 const emit = defineEmits<{
   close: []
@@ -156,6 +177,7 @@ const emit = defineEmits<{
 }>()
 
 const eldersStore = useEldersStore()
+const usersStore = useUsersStore()
 
 const formData = ref<CreateElderDto>({
   firstName: '',
@@ -168,8 +190,19 @@ const formData = ref<CreateElderDto>({
   medicalNotes: ''
 })
 
+const selectedCaregivers = ref<string[]>([])
+const availableUsers = ref<User[]>([])
 const loading = ref(false)
 const error = ref('')
+
+onMounted(async () => {
+  try {
+    await usersStore.fetchUsers()
+    availableUsers.value = usersStore.users
+  } catch (err) {
+    console.error('Failed to load users:', err)
+  }
+})
 
 async function handleSubmit() {
   error.value = ''
@@ -177,6 +210,12 @@ async function handleSubmit() {
 
   try {
     const elder = await eldersStore.createElder(formData.value)
+    
+    // Assign caregivers if any were selected
+    if (selectedCaregivers.value.length > 0) {
+      await eldersStore.assignCaregivers(elder.id, selectedCaregivers.value)
+    }
+    
     emit('created', elder)
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Failed to create elder'

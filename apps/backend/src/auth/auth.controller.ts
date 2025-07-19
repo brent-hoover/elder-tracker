@@ -57,12 +57,22 @@ export class AuthController {
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(
+  async getProfile(
     @Request()
     req: Express.Request & {
       user: { userId: string; email: string; isAdmin: boolean };
     },
   ) {
-    return req.user;
+    const user = await this.authService.getUserById(req.user.userId);
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      isAdmin: user.isAdmin,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 }

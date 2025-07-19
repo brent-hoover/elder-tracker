@@ -8,12 +8,16 @@ import { UsersModule } from './users/users.module';
 import { EldersModule } from './elders/elders.module';
 import { AuthModule } from './auth/auth.module';
 import { StatusUpdatesModule } from './status-updates/status-updates.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig],
+      envFilePath: process.cwd().includes('apps/backend') 
+        ? '.env' 
+        : 'apps/backend/.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -30,6 +34,7 @@ import { StatusUpdatesModule } from './status-updates/status-updates.module';
     EldersModule,
     AuthModule,
     StatusUpdatesModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

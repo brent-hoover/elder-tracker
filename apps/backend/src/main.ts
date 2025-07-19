@@ -24,6 +24,17 @@ if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = 'default-jwt-secret-change-in-production';
 }
 
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('=== Received SIGTERM signal ===');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('=== Received SIGINT signal ===');
+  process.exit(0);
+});
+
 async function bootstrap() {
   console.log('=== Starting NestJS Application ===');
   const app = await NestFactory.create(AppModule);
@@ -72,15 +83,13 @@ async function bootstrap() {
 
   const port = process.env.PORT ?? 3000;
   
-  // Add a simple health check endpoint before app starts
-  const httpAdapter = app.getHttpAdapter();
-  const instance = httpAdapter.getInstance();
-  instance.get('/api/health-check', (req, res) => {
-    res.json({ status: 'starting', port, timestamp: new Date().toISOString() });
-  });
-  
   await app.listen(port, '0.0.0.0');
   console.log(`=== Application is running on port ${port} ===`);
+  
+  // Keep the process alive and log periodic status
+  setInterval(() => {
+    console.log(`[${new Date().toISOString()}] Application is still running on port ${port}`);
+  }, 30000); // Log every 30 seconds
 }
 bootstrap().catch((error) => {
   console.error('=== Failed to start application ===');

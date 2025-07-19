@@ -2,9 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { join } from 'path';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Enable CORS
+  app.enableCors();
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,6 +29,14 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  // Serve static frontend files in production
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(join(__dirname, 'frontend')));
+    app.use('*', (req, res) => {
+      res.sendFile(join(__dirname, 'frontend', 'index.html'));
+    });
+  }
 
   await app.listen(process.env.PORT ?? 3000);
 }

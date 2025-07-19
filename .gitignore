@@ -1,7 +1,8 @@
 # compiled output
-/dist
-/node_modules
-/build
+dist/
+node_modules/
+build/
+*.tsbuildinfo
 
 # Logs
 logs
@@ -54,3 +55,19 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Package lock files (we're using npm)
+yarn.lock
+pnpm-lock.yaml
+
+# Frontend build output
+apps/frontend/dist/
+apps/frontend/.vite/
+
+# Backend build output  
+apps/backend/dist/
+
+# Monorepo
+**/node_modules/
+**/dist/
+**/.turbo/

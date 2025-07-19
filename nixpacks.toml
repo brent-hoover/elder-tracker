@@ -7,16 +7,11 @@ cmds = ["npm ci --workspaces --include-workspace-root"]
 [phases.build]
 cmds = [
     "echo 'Build env check - DATABASE_URL:' $DATABASE_URL",
-    "npm run build:backend",
+    "echo 'Memory info:' && free -m",
+    "NODE_OPTIONS='--max-old-space-size=2048' npm run build:backend",
     "npm run build:frontend",
     "mkdir -p apps/backend/dist/src",
-    "cp -r apps/frontend/dist apps/backend/dist/src/frontend",
-    "echo '=== Checking build output ==='",
-    "ls -la apps/backend/dist/src/",
-    "echo '=== main.js file info ==='",
-    "ls -la apps/backend/dist/src/main.js || echo 'main.js not found'",
-    "echo '=== First lines of main.js ==='",
-    "head -15 apps/backend/dist/src/main.js"
+    "cp -r apps/frontend/dist apps/backend/dist/src/frontend"
 ]
 
 [start]

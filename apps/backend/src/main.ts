@@ -7,6 +7,7 @@ import * as express from 'express';
 
 // Debug environment variables at startup
 console.log('=== Application Startup ===');
+console.log('VERSION: 2024-07-19-v2'); // Version marker to verify rebuild
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
 console.log('PORT:', process.env.PORT);

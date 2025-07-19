@@ -50,19 +50,19 @@ export class EldersController {
     return this.eldersService.findAll();
   }
 
+  @Get('caregiver/:userId')
+  @ApiOperation({ summary: 'Get elders assigned to a specific caregiver' })
+  @ApiResponse({ status: 200, description: 'List of elders retrieved' })
+  findByCaregiver(@Param('userId') userId: string): Promise<Elder[]> {
+    return this.eldersService.findByCaregiver(userId);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get elder by ID' })
   @ApiResponse({ status: 200, description: 'Elder retrieved' })
   @ApiResponse({ status: 404, description: 'Elder not found' })
   findOne(@Param('id') id: string): Promise<Elder> {
     return this.eldersService.findOne(id);
-  }
-
-  @Get('caregiver/:userId')
-  @ApiOperation({ summary: 'Get elders assigned to a specific caregiver' })
-  @ApiResponse({ status: 200, description: 'List of elders retrieved' })
-  findByCaregiver(@Param('userId') userId: string): Promise<Elder[]> {
-    return this.eldersService.findByCaregiver(userId);
   }
 
   @Patch(':id')

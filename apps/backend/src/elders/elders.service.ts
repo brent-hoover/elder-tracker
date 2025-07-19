@@ -24,30 +24,16 @@ export class EldersService {
   async findAll(): Promise<Elder[]> {
     return this.eldersRepository.find({
       relations: ['caregivers'],
-      select: {
-        caregivers: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
     });
   }
 
   async findOne(id: string): Promise<Elder> {
+    console.log(`=== Finding elder with ID: ${id} ===`);
     const elder = await this.eldersRepository.findOne({
       where: { id },
       relations: ['caregivers'],
-      select: {
-        caregivers: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
     });
+    console.log(`=== Elder found: ${elder ? 'YES' : 'NO'} ===`);
     if (!elder) {
       throw new NotFoundException(`Elder with ID ${id} not found`);
     }

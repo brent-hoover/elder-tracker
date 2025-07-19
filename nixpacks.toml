@@ -2,10 +2,15 @@
 nixPkgs = ["nodejs-18_x", "npm-9_x"]
 
 [phases.install]
-cmds = ["npm ci --include=dev"]
+cmds = ["npm ci --workspaces --include-workspace-root"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = [
+    "npm run build:backend",
+    "npm run build:frontend",
+    "mkdir -p apps/backend/dist/src",
+    "cp -r apps/frontend/dist apps/backend/dist/src/frontend"
+]
 
 [start]
-cmd = "npm run start"
+cmd = "cd apps/backend && npm run start:prod"

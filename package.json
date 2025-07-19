@@ -12,7 +12,7 @@
     "build": "npm run build:backend && npm run build:frontend && npm run postbuild",
     "build:backend": "npm run build --workspace=@elder-tracker/backend",
     "build:frontend": "npm run build --workspace=@elder-tracker/frontend",
-    "postbuild": "mkdir -p apps/backend/dist && cp -r apps/frontend/dist apps/backend/dist/frontend",
+    "postbuild": "mkdir -p apps/backend/dist/src && cp -r apps/frontend/dist apps/backend/dist/src/frontend",
     "start": "npm run start:prod --workspace=@elder-tracker/backend",
     "start:backend": "npm run start:prod --workspace=@elder-tracker/backend",
     "start:frontend": "npm run preview --workspace=@elder-tracker/frontend",

@@ -54,11 +54,15 @@ RUN echo '#!/bin/sh' > /debug.sh && \
     echo 'ls -la /app/apps/backend/' >> /debug.sh && \
     echo 'ls -la /app/apps/backend/dist/' >> /debug.sh && \
     echo 'ls -la /app/apps/backend/dist/src/' >> /debug.sh && \
+    echo 'echo "=== Working directory when npm start runs ==="' >> /debug.sh && \
+    echo 'pwd' >> /debug.sh && \
+    echo 'echo "=== Files in current directory ==="' >> /debug.sh && \
+    echo 'ls -la' >> /debug.sh && \
     echo 'echo "=== Environment variables ==="' >> /debug.sh && \
     echo 'env | grep -E "NODE_ENV|PORT|DATABASE_URL|JWT_SECRET" | sed "s/=.*$/=***/"' >> /debug.sh && \
     echo 'echo "=== Starting application ==="' >> /debug.sh && \
     echo 'exec npm start' >> /debug.sh && \
     chmod +x /debug.sh
 
-# Start the application with debug output
-CMD ["/debug.sh"]
+# Start the application directly from the correct location
+CMD ["node", "/app/apps/backend/dist/main.js"]

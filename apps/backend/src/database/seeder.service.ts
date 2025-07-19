@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { User } from '../users/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -9,10 +9,46 @@ export class SeederService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private dataSource: DataSource,
   ) {}
 
   async onModuleInit() {
-    await this.seedAdminUser();
+    // Wait for database connection and tables to be ready
+    await this.waitForDatabase();
+    
+    try {
+      await this.seedAdminUser();
+    } catch (error) {
+      console.error('Error seeding admin user:', error);
+    }
+  }
+
+  private async waitForDatabase(maxRetries = 10, delay = 1000): Promise<void> {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        // Check if the users table exists
+        const result = await this.dataSource.query(`
+          SELECT EXISTS (
+            SELECT FROM information_schema.tables 
+            WHERE table_schema = 'public' 
+            AND table_name = 'users'
+          );
+        `);
+        
+        if (result[0]?.exists) {
+          console.log('✅ Database tables are ready');
+          return;
+        }
+      } catch (error) {
+        console.log(`⏳ Waiting for database tables to be created... (attempt ${i + 1}/${maxRetries})`);
+      }
+      
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
+    throw new Error('Database tables were not created in time');
   }
 
   private async seedAdminUser() {

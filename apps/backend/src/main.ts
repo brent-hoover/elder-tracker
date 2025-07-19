@@ -5,6 +5,12 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 import * as express from 'express';
 
+// Debug environment variables at startup
+console.log('=== Application Startup ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+console.log('PORT:', process.env.PORT);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

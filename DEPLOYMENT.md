@@ -18,7 +18,9 @@
    NODE_ENV=production
    JWT_SECRET=your-super-secret-jwt-key-change-this
    JWT_EXPIRATION=7d
+   PORT=3000
    ```
+   - Note: DATABASE_URL will be automatically provided by Railway when you add PostgreSQL
 
 3. **Add PostgreSQL Database**
    - In Railway dashboard, click "New Service"

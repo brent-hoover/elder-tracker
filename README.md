@@ -106,11 +106,24 @@ npm run test:watch    # Watch mode
 
 This monorepo is pre-configured for Railway:
 
-1. Push to GitHub
-2. Connect repo to Railway
-3. Railway auto-detects the monorepo
-4. Set environment variables in Railway dashboard
-5. Deploy!
+1. **Create Railway Project**
+   - Login to Railway
+   - Create new project
+   - Connect your GitHub repository
+
+2. **Add PostgreSQL Database** (REQUIRED)
+   - Click "New Service" → "Database" → "PostgreSQL"
+   - Railway will automatically inject DATABASE_URL
+
+3. **Configure Environment Variables**
+   ```
+   NODE_ENV=production
+   JWT_SECRET=your-super-secret-key-change-this
+   JWT_EXPIRATION=7d
+   ```
+
+4. **Deploy**
+   - Railway will auto-deploy on every push to main branch
 
 ## 📋 Environment Variables
 

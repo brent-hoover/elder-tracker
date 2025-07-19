@@ -1,1 +1,1 @@
-web: npm run start
+web: cd apps/backend && node dist/src/main

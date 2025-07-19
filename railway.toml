@@ -1,0 +1,16 @@
+# Railway Configuration
+# This app requires a PostgreSQL database
+# Add it manually via Railway dashboard: New Service → Database → PostgreSQL
+
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm run start"
+healthcheckPath = "/api"
+healthcheckTimeout = 30
+restartPolicyType = "always"
+
+[environments.production]
+NODE_ENV = "production"
+PORT = 3000

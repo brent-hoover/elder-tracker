@@ -15,9 +15,11 @@ import { DatabaseModule } from './database/database.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig],
-      envFilePath: process.cwd().includes('apps/backend') 
-        ? '.env' 
-        : 'apps/backend/.env',
+      envFilePath: process.env.NODE_ENV === 'production' 
+        ? undefined 
+        : process.cwd().includes('apps/backend') 
+          ? '.env' 
+          : 'apps/backend/.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

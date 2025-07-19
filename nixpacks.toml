@@ -14,8 +14,10 @@ cmds = [
     "echo '=== Checking build output ==='",
     "ls -la apps/backend/dist/src/",
     "echo '=== main.js file info ==='",
-    "ls -la apps/backend/dist/src/main.js || echo 'main.js not found'"
+    "ls -la apps/backend/dist/src/main.js || echo 'main.js not found'",
+    "echo '=== First lines of main.js ==='",
+    "head -15 apps/backend/dist/src/main.js"
 ]
 
 [start]
-cmd = "echo 'TEST: Start command is running' && sleep 5 && echo 'TEST: After sleep' && node start.js"
+cmd = "cd apps/backend && pwd && ls -la dist/src/main.js && head -15 dist/src/main.js && node dist/src/main"

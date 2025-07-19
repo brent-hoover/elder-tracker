@@ -18,4 +18,4 @@ cmds = [
 ]
 
 [start]
-cmd = "node --version && echo 'Starting app...' && cd apps/backend && node dist/src/main"
+cmd = "echo 'Container started' && pwd && ls -la && node start.js"

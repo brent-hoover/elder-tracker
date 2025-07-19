@@ -46,5 +46,19 @@ EXPOSE 3000
 # Set environment to production
 ENV NODE_ENV=production
 
-# Start the application
-CMD ["npm", "start"]
+# Add a debug script to check file structure
+RUN echo '#!/bin/sh' > /debug.sh && \
+    echo 'echo "=== Directory structure ==="' >> /debug.sh && \
+    echo 'ls -la /app/' >> /debug.sh && \
+    echo 'ls -la /app/apps/' >> /debug.sh && \
+    echo 'ls -la /app/apps/backend/' >> /debug.sh && \
+    echo 'ls -la /app/apps/backend/dist/' >> /debug.sh && \
+    echo 'ls -la /app/apps/backend/dist/src/' >> /debug.sh && \
+    echo 'echo "=== Environment variables ==="' >> /debug.sh && \
+    echo 'env | grep -E "NODE_ENV|PORT|DATABASE_URL|JWT_SECRET" | sed "s/=.*$/=***/"' >> /debug.sh && \
+    echo 'echo "=== Starting application ==="' >> /debug.sh && \
+    echo 'exec npm start' >> /debug.sh && \
+    chmod +x /debug.sh
+
+# Start the application with debug output
+CMD ["/debug.sh"]

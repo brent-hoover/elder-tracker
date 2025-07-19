@@ -40,11 +40,6 @@ RUN npm ci --omit=dev --workspaces --include-workspace-root
 # Copy built application
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
-# Debug: List what was copied
-RUN echo "=== Verifying copied files ===" && \
-    ls -la /app/apps/backend/ && \
-    ls -la /app/apps/backend/dist/ || echo "dist directory not found"
-
 # Expose port
 EXPOSE 3000
 
@@ -52,4 +47,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Start the application directly
-CMD ["node", "/app/apps/backend/dist/main.js"]
+CMD ["node", "/app/apps/backend/dist/src/main.js"]

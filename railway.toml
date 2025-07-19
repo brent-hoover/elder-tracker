@@ -9,7 +9,6 @@ builder = "nixpacks"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 30
 restartPolicyType = "always"
-# startCommand = "node health-server.js"  # Uncomment to test minimal server
 
 [environments.production]
 NODE_ENV = "production"

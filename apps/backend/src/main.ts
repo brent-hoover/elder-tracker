@@ -12,6 +12,7 @@ console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
 console.log('PORT:', process.env.PORT);
 
 async function bootstrap() {
+  console.log('=== Starting NestJS Application ===');
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
@@ -41,6 +42,7 @@ async function bootstrap() {
 
   // Serve static frontend files in production
   if (process.env.NODE_ENV === 'production') {
+    console.log('=== Setting up production static file serving ===');
     const expressApp = app.getHttpAdapter().getInstance();
     
     // Serve static files from the frontend build
@@ -55,6 +57,8 @@ async function bootstrap() {
     });
   }
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  console.log(`=== Application is running on port ${port} ===`);
 }
 void bootstrap();

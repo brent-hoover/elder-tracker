@@ -13,10 +13,11 @@ export class AppController {
   }
 
   @Get('health')
-  getHealth(): { status: string; timestamp: string } {
+  getHealth(): { status: string; timestamp: string; env: string } {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV || 'unknown',
     };
   }
 }

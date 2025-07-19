@@ -1,5 +1,5 @@
 import apiClient from './client'
-import type { Elder, CreateElderDto } from '@/types'
+import type { Elder, CreateElderDto, UpdateElderDto } from '@/types'
 
 export const eldersApi = {
   async getAll(): Promise<Elder[]> {
@@ -22,7 +22,7 @@ export const eldersApi = {
     return data
   },
 
-  async update(id: string, elderData: Partial<CreateElderDto>): Promise<Elder> {
+  async update(id: string, elderData: UpdateElderDto): Promise<Elder> {
     const { data } = await apiClient.patch<Elder>(`/elders/${id}`, elderData)
     return data
   },

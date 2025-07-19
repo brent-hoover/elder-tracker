@@ -103,7 +103,8 @@ import AppLayout from '@/components/AppLayout.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEldersStore } from '@/stores/elders'
 import { useStatusUpdatesStore } from '@/stores/status-updates'
-import type { StatusUpdate, UpdateType } from '@/types'
+import type { StatusUpdate } from '@/types'
+import { UpdateType } from '@/types'
 
 const authStore = useAuthStore()
 const eldersStore = useEldersStore()

@@ -78,6 +78,10 @@ export interface CreateElderDto {
   medicalNotes?: string
 }
 
+export interface UpdateElderDto extends Partial<CreateElderDto> {
+  isActive?: boolean
+}
+
 export interface CreateStatusUpdateDto {
   type: UpdateType
   description: string

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { eldersApi } from '@/api/elders'
-import type { Elder, CreateElderDto } from '@/types'
+import type { Elder, CreateElderDto, UpdateElderDto } from '@/types'
 
 export const useEldersStore = defineStore('elders', () => {
   const elders = ref<Elder[]>([])
@@ -51,7 +51,7 @@ export const useEldersStore = defineStore('elders', () => {
     }
   }
 
-  async function updateElder(id: string, elderData: Partial<CreateElderDto>) {
+  async function updateElder(id: string, elderData: UpdateElderDto) {
     loading.value = true
     error.value = null
     try {

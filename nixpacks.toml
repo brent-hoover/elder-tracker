@@ -20,4 +20,4 @@ cmds = [
 ]
 
 [start]
-cmd = "cd apps/backend && pwd && ls -la dist/src/main.js && head -15 dist/src/main.js && node dist/src/main"
+cmd = "pwd && ls -la && ls -la apps/backend/dist/src/ && cat apps/backend/dist/src/main.js | head -20"

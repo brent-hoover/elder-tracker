@@ -3,7 +3,8 @@
 # Add it manually via Railway dashboard: New Service → Database → PostgreSQL
 
 [build]
-builder = "nixpacks"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 healthcheckPath = "/api/health"

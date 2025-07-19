@@ -85,6 +85,7 @@ async function bootstrap() {
   
   await app.listen(port, '0.0.0.0');
   console.log(`=== Application is running on port ${port} ===`);
+  console.log(`=== Health check available at: http://localhost:${port}/api/health ===`);
   
   // Keep the process alive and log periodic status
   setInterval(() => {
